@@ -56,45 +56,78 @@
 
 //Zod Input validation:-
 
-const express = require('express');
-const app = express();
-const zod = require('zod');
+// const express = require('express');
+// const app = express();
+// const zod = require('zod');
 
-const schema = zod.array(zod.number());
+// const schema = zod.array(zod.number());
 
-app.use(express.json());
+// app.use(express.json());
 
-app.post('/health-checkup', function (req, res) {
-    const kidneys = req.body.kidneys;
-    // const kidneysLength = kidneys.length;
-    // if (!kidneys || !Array.isArray(kidneys)) {
-    //     res.status(400).send({ error: 'Invalid or missing kidneys property in the request body.' });
-    //     return;
-    // }
-    const response = schema.safeParse(kidneys);
-    // res.send({
-    //     response
-    // })
-    // res.send(`Length of an kidney: ${kidneysLength}`);
-    if(!response.success){
-        res.status(411).json({
-            msg:"input is invalid"
-        })
-    }else{
-        res.send({
-            response
-        })
-    }
-})
-
-// app.use((error, req, res, next) => {
-//     res.status(500).send("An error occurred")
+// app.post('/health-checkup', function (req, res) {
+//     const kidneys = req.body.kidneys;
+//     // const kidneysLength = kidneys.length;
+//     // if (!kidneys || !Array.isArray(kidneys)) {
+//     //     res.status(400).send({ error: 'Invalid or missing kidneys property in the request body.' });
+//     //     return;
+//     // }
+//     const response = schema.safeParse(kidneys);
+//     // res.send({
+//     //     response
+//     // })
+//     // res.send(`Length of an kidney: ${kidneysLength}`);
+//     if(!response.success){
+//         res.status(411).json({
+//             msg:"input is invalid"
+//         })
+//     }else{
+//         res.send({
+//             response
+//         })
+//     }
 // })
 
-app.listen(3000, () => {
-    console.log('server listening on port 3000');
+// // app.use((error, req, res, next) => {
+// //     res.status(500).send("An error occurred")
+// // })
+
+// app.listen(3000, () => {
+//     console.log('server listening on port 3000');
+// })
+
+// --------------------------------------------------------------------------------------------------------------------
+
+const zod = require('zod');
+const express = require('express');
+const app = express();
+
+function validateInput(value) {
+  const schema = zod.object({
+    name: zod.string().min(2).max(20),
+    age: zod.number().min(18).max(100),
+    email: zod.string().email(),
+    password: zod.string().min(8).max(20),
+  });
+
+  const response = schema.safeParse(value);
+  return response;
+}
+
+app.post('/login' , function(req,res){
+    
+  const response = validateInput(req.body);
+  if(!response.success){
+            res.status(411).json({
+                msg:"input is invalid"
+            })
+        }else{
+            res.send({
+                response
+            })
+        }
 })
 
+app.listen(3000)
 
 // ------------------------------------------------------------------------------------------------
 // schema for input validation in the context of social media
