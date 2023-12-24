@@ -27,7 +27,7 @@ app.post('/login', (req, res) => {
     //check if user exists
     const user = USERS.find(user => user.username === username)
 
-    // if user does not exist
+    // if user does not exi
     if(!user){
         return res.status(400).json({
             message:"user does not exist"
