@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <style>
+        body {
+          font-family: 'Arial', sans-serif;
+          margin: 20%;
+          padding: 0;
+          background-color: #1a1a1a;
+          color: #ffffff;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          min-height: 100vh;
+        }
+    
+        header {
+          background-color: #242938;
+          color: #ffffff;
+          text-align: center;
+          padding: 1rem;
+          margin-bottom: 20px;
+        }
+    
+        main {
+          max-width: 800px;
+          padding: 20px;
+          background-color: #333;
+          border-radius: 8px;
+          box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+          width: 100%;
+          box-sizing: border-box;
+        }
+    
+        input[type="text"] {
+          width: 100%;
+          padding: 10px;
+          margin-bottom: 10px;
+          box-sizing: border-box;
+          border: 1px solid #555;
+          border-radius: 4px;
+          background-color: #333;
+          color: #ffffff;
+        }
+    
+        button {
+          background-color: #4a76a8;
+          color: #ffffff;
+          padding: 10px;
+          margin-bottom: 10px;
+          border: none;
+          border-radius: 4px;
+          cursor: pointer;
+          width: 100%;
+          box-sizing: border-box;
+        }
+    
+        button:hover {
+          background-color: #325580;
+        }
+    
+        #todos {
+          margin-top: 20px;
+        }
+
+        #todos.div {
+
+        }
+
+
+    
+        .todo {
+          border: 1px solid #555;
+          padding: 10px;
+          margin-bottom: 10px;
+          border-radius: 4px;
+          background-color: #444;
+          position: relative;
+          text-align: center;
+        }
+
+
+    
+        .todo button {
+          margin-left: 10px;
+        }
+      </style>
+  <script>
+    let globalId = 1;
+
+    function markAsDone(todoId) {
+      const parent = document.getElementById(todoId);
+      parent.children[2].innerHTML = "Done!";
+    }
+
+    function deleteTodo(todoId) {
+      const parent = document.getElementById("todos");
+      const childToRemove = document.getElementById(todoId);
+
+      if (childToRemove) {
+        parent.removeChild(childToRemove);
+      } else {
+        console.error("Todo not found for deletion.");
+      }
+    }
+
+    function updateTodo(todoId) {
+      const todoElement = document.getElementById(todoId);
+      const titleElement = todoElement.children[0];
+      const descriptionElement = todoElement.children[1];
+
+      const newTitle = prompt("Enter new title", titleElement.innerHTML);
+      const newDescription = prompt("Enter new description", descriptionElement.innerHTML);
+
+      if (newTitle !== null && newDescription !== null) {
+        titleElement.innerHTML = newTitle;
+        descriptionElement.innerHTML = newDescription;
+      }
+    }
+
+    function createChild(title, description, id) {
+      const child = document.createElement("div");
+      const firstGrandParent = document.createElement("div");
+      firstGrandParent.innerHTML = title;
+      const secondGrandParent = document.createElement("div");
+      secondGrandParent.innerHTML = description;
+      const thirdGrandParent = document.createElement("button");
+      thirdGrandParent.innerHTML = "Mark as done";
+      thirdGrandParent.setAttribute("onclick", `markAsDone(${id})`);
+      const updateButton = document.createElement("button");
+      updateButton.innerHTML = "Update";
+      updateButton.setAttribute("onclick", `updateTodo(${id})`);
+      const deleteButton = document.createElement("button");
+      deleteButton.innerHTML = "Delete";
+      deleteButton.setAttribute("onclick", `deleteTodo(${id})`);
+
+      child.appendChild(firstGrandParent);
+      child.appendChild(secondGrandParent);
+      child.appendChild(thirdGrandParent);
+      child.appendChild(updateButton);
+      child.appendChild(deleteButton);
+      child.setAttribute("id", id);
+      return child;
+    }
+
+    function addTodo() {
+      const title = document.getElementById("title").value;
+      const description = document.getElementById("description").value;
+      const parent = document.getElementById("todos");
+
+      parent.appendChild(createChild(title, description, globalId++));
+    }
+  </script>
+</head>
+
+<body>
+  <input type="text" id="title" placeholder="Todo title"><br /><br />
+  <input type="text" id="description" placeholder="Todo description"><br /><br />
+  <button onclick="addTodo()">Add todo</button>
+
+  <div id="todos"></div>
+</body>
+
+</html>
