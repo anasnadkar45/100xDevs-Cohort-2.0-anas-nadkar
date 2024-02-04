@@ -33,6 +33,6 @@ function runAfter1Second(fn:()=>void){
 }
 
 runAfter1Second(function(){
-    console.log("hii how are you?");
+    console.log("hii how are you man?");
 })
 
